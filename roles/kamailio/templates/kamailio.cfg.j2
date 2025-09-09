@@ -1,21 +1,16 @@
-#### Database configuration - PostgreSQL ####
-
-# Load PostgreSQL module
+#### Load PostgreSQL driver
 loadmodule "db_postgres.so"
 
-# Core modules yang perlu koneksi database
+#### Load modules that use the DB
 loadmodule "usrloc.so"
 loadmodule "auth_db.so"
 loadmodule "acc.so"
 
-# Konfigurasi koneksi DB untuk db_postgres
-modparam("db_postgres", "db_url", "postgres://{{ db_user }}:{{ db_password }}@{{ db_host }}:{{ db_port }}/{{ db_name }}")
-
-# Konfigurasi usrloc
-modparam("usrloc", "db_mode", {{ usrloc_db_mode | default(2) }})
-
-# Konfigurasi auth_db (pakai PostgreSQL URL yang sama)
+#### Database URL - set per module
+modparam("usrloc", "db_url", "postgres://{{ db_user }}:{{ db_password }}@{{ db_host }}:{{ db_port }}/{{ db_name }}")
 modparam("auth_db", "db_url", "postgres://{{ db_user }}:{{ db_password }}@{{ db_host }}:{{ db_port }}/{{ db_name }}")
+modparam("acc", "db_url", "postgres://{{ db_user }}:{{ db_password }}@{{ db_host }}:{{ db_port }}/{{ db_name }}")
+
 
 # Konfigurasi accounting (acc)
 modparam("acc", "log_flag", {{ acc_log_flag | default(1) }})
