@@ -5,6 +5,29 @@
       - kamailio-postgres-modules
     state: present
 
+
+- name: Ensure runtime directory for Kamailio exists
+  file:
+    path: /var/run/kamailio
+    state: directory
+    owner: kamailio
+    group: kamailio
+    mode: '0755'
+
+- name: Ensure tmpfiles.d entry for Kamailio
+  copy:
+    dest: /etc/tmpfiles.d/kamailio.conf
+    content: |
+      d /var/run/kamailio 0755 kamailio kamailio -
+  owner: root
+  group: root
+  mode: '0644'
+
+- name: Apply tmpfiles configuration
+  command: systemd-tmpfiles --create
+  args:
+    warn: false
+
 - name: Deploy kamailio.cfg
   template:
     src: kamailio.cfg.j2
