@@ -1,4 +1,4 @@
-- name: Install PostgreSQL 16 and psycopg2
+- name: Install pgbouncer
   apt:
     name: pgbouncer
     state: present
