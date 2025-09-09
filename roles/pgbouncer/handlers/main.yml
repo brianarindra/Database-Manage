@@ -1,0 +1,5 @@
+- name: restart package
+  service:
+    name: pgbouncer
+    state: restarted
+    enabled: yes

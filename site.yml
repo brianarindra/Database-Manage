@@ -3,5 +3,8 @@
   roles:
     - postgresql
     - pgbouncer
-    - kamailio
 
+- hosts: sip
+  become: yes
+  roles:
+    - kamailio

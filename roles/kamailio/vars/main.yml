@@ -1,0 +1,18 @@
+db_type: postgres
+db_user: kamailio
+db_password: supersecret
+db_host: 127.0.0.1
+db_port: 6432           # PgBouncer port
+db_name: kamailio
+
+usrloc_db_mode: 2
+
+log_level: 3
+acc_log_flag: 1
+acc_db_flag: 1
+
+tls_enabled: true
+tls_config_file: /etc/kamailio/tls.cfg
+
+anti_flood_enabled: true
+pv_rate_limit: 50

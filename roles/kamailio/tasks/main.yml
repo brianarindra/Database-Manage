@@ -1,0 +1,11 @@
+- name: Install Kamailio
+  apt:
+    name: kamailio
+    state: present
+
+- name: Deploy kamailio.cfg
+  template:
+    src: kamailio.cfg.j2
+    dest: /etc/kamailio/kamailio.cfg
+  notify: restart kamailio
+  

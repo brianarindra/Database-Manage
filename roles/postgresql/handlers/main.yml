@@ -1,0 +1,5 @@
+- name: Restart PostgreSQL Master
+  service:
+    name: postgresql
+    state: restarted
+    enabled: yes
