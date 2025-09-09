@@ -9,9 +9,6 @@
   template:
     src: bouncer.ini.j2
     dest: /etc/pgbouncer/pgbouncer.ini
-    owner: pgbouncer
-    group: pgbouncer
-    mode: '0644'
   notify: restart package
 
 
