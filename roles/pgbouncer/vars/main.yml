@@ -1,0 +1,51 @@
+replication_user: replicator
+replication_password: "passwordku"
+postgres_user: postgres
+postgres_password: "prodpassword"
+slave_ip: 192.168.200.0/24   # Ganti sesuai IP slave
+
+
+
+pgbouncer_listen_port: 6432
+pgbouncer_listen_addr: "0.0.0.0"
+
+pgbouncer_auth_type: "md5"
+pgbouncer_pool_mode: "session"
+pgbouncer_default_pool_size: 20
+
+pgbouncer_users:
+  - { name: "postgres", password: "prodpassword" }
+  - { name: "app_user", password: "abc123" }
+
+pgbouncer_databases:
+  - { name: "postgres", host: "127.0.0.1", port: 5432 }
+  - { name: "appdb", host: "127.0.0.1", port: 5432 }
+
+
+
+
+postgres_version: 16
+postgres_user: kamailio
+postgres_password: supersecret
+max_connections: 200
+wal_level: replica
+max_wal_senders: 10
+wal_keep_size: 1GB
+
+
+postgres_port: 5432
+max_connections: 200
+shared_buffers: 2GB
+work_mem: 64MB
+maintenance_work_mem: 512MB
+wal_level: replica
+archive_mode: on
+archive_command: "cp %p /var/lib/postgresql/wal_archive/%f"
+max_wal_senders: 10
+wal_keep_size: 256MB
+hot_standby: on
+listen_addresses: "*"
+log_directory: /var/log/postgresql
+log_filename: "postgresql-%Y-%m-%d.log"
+log_min_duration_statement: 500
+

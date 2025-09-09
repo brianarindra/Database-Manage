@@ -1,0 +1,25 @@
+# PostgreSQL Master Configuration - Production
+
+# Connection settings
+listen_addresses = '{{ listen_addresses | default("*") }}'
+port = {{ postgres_port | default(5432) }}
+max_connections = {{ max_connections | default(200) }}
+
+# Memory tuning
+shared_buffers = {{ shared_buffers | default("2GB") }}
+work_mem = {{ work_mem | default("64MB") }}
+maintenance_work_mem = {{ maintenance_work_mem | default("512MB") }}
+
+# WAL / Replication settings
+wal_level = '{{ wal_level | default("replica") }}'
+archive_mode = {{ archive_mode | default("on") }}
+archive_command = '{{ archive_command | default("cp %p /var/lib/postgresql/wal_archive/%f") }}'
+max_wal_senders = {{ max_wal_senders | default(10) }}
+wal_keep_size = {{ wal_keep_size | default("256MB") }}
+hot_standby = {{ hot_standby | default("on") }}
+
+# Logging
+logging_collector = on
+log_directory = '{{ log_directory | default("/var/log/postgresql") }}'
+log_filename = '{{ log_filename | default("postgresql-%Y-%m-%d.log") }}'
+log_min_duration_statement = {{ log_min_duration_statement | default(500) }}

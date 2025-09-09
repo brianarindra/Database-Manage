@@ -1,0 +1,130 @@
+---
+- name: Setup PostgreSQL Master
+  hosts: master
+  tasks:
+
+    - name: Ensure postgres user exists
+      ansible.builtin.user:
+        name: postgres
+        shell: /bin/false
+        home: /var/lib/postgresql
+        system: yes
+        create_home: yes
+
+    - name: Install PostgreSQL 16 and psycopg2
+      apt:
+        name:
+          - postgresql-16
+          - python3-psycopg2
+          - pgbouncer
+          - python3-passlib
+        state: present
+        update_cache: yes
+
+    - name: Configure postgresql.conf for replication
+      template:
+        src: postgresql.conf.j2
+        dest: /etc/postgresql/16/main/postgresql.conf
+      notify: Restart PostgreSQL Master
+
+    - name: Configure pg_hba.conf for replication and clients
+      blockinfile:
+        path: /etc/postgresql/16/main/pg_hba.conf
+        block: |
+          # Allow replication from slave
+          host  replication {{ replication_user }} {{ slave_ip }} md5
+      notify: Restart PostgreSQL Master
+
+    - name: Wait for PostgreSQL socket to be ready
+      wait_for:
+        path: /var/run/postgresql/.s.PGSQL.5432
+        state: present
+        timeout: 30
+
+    - name: Set password for default postgres user
+      become_user: postgres
+      community.postgresql.postgresql_user:
+        name: "{{ postgres_user }}"
+        password: "{{ postgres_password }}"
+        role_attr_flags: "SUPERUSER,CREATEDB,CREATEROLE,LOGIN"
+        login_unix_socket: /var/run/postgresql
+
+    - name: Create replication user
+      become_user: postgres
+      postgresql_user:
+        name: "{{ replication_user }}"
+        password: "{{ replication_password }}"
+        role_attr_flags: "REPLICATION,LOGIN"
+      
+
+    - name: Create user Kamailio
+      become_user: postgres
+      postgresql_user:
+        name: "{{ replication_user }}"
+        password: "{{ replication_password }}"
+        role_attr_flags: "REPLICATION,LOGIN"
+
+    # ================= PG BOUNCER ==================
+
+    - name: Generate pgbouncer.ini
+      copy:
+        dest: /etc/pgbouncer/pgbouncer.ini
+        content: |
+          [databases]
+          {% for db in pgbouncer_databases %}
+          {{ db.name }} = host={{ db.host }} port={{ db.port }} auth_user=postgres
+          {% endfor %}
+
+          [pgbouncer]
+          listen_addr = {{ pgbouncer_listen_addr }}
+          listen_port = {{ pgbouncer_listen_port }}
+          auth_type = {{ pgbouncer_auth_type }}
+          auth_file = /etc/pgbouncer/userlist.txt
+          pool_mode = {{ pgbouncer_pool_mode }}
+          max_client_conn = 100
+          default_pool_size = {{ pgbouncer_default_pool_size }}
+          log_connections = 1
+          log_disconnections = 1
+      notify: restart package
+
+    - name: Generate userlist.txt
+      copy:
+        dest: /etc/pgbouncer/userlist.txt
+        content: |
+          {% for u in pgbouncer_users %}
+          "{{ u.name }}" "{{ u.password }}"
+          {% endfor %}
+      notify: restart package
+
+    # ================= Kamailio tambahan ==================
+    - name: Install Kamailio
+      apt:
+        name:
+          - kamailio
+          - kamailio-postgres-modules
+        state: present
+        update_cache: yes
+
+    - name: Configure kamailio.cfg to use PostgreSQL via PgBouncer
+      lineinfile:
+        path: /etc/kamailio/kamailio.cfg
+        regexp: '^#!define DBURL'
+        line: '#!define DBURL "postgres://app_user:abc123@127.0.0.1:6432/appdb"'
+        create: yes
+      notify: restart kamailio
+
+  handlers:
+    - name: Restart PostgreSQL Master
+      service:
+        name: postgresql
+        state: restarted
+
+    - name: restart package
+      service:
+        name: pgbouncer
+        state: restarted
+
+    - name: restart kamailio
+      service:
+        name: kamailio
+        state: restarted
