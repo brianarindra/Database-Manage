@@ -7,7 +7,7 @@
   
 - name: Deploy pgbouncer.ini from template
   template:
-    src: pgbouncer.ini.j2
+    src: bouncer.ini.j2
     dest: /etc/pgbouncer/pgbouncer.ini
     owner: pgbouncer
     group: pgbouncer

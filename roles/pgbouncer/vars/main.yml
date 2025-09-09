@@ -15,4 +15,4 @@ pgbouncer_default_pool_size: 50
 
 pgbouncer_users:
   - { name: "kamailio", password: "supersecret" }
-  - { name: "posgres", password: "prodpassword" }
+  - { name: "postgres", password: "prodpassword" }
