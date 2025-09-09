@@ -3,8 +3,12 @@
   roles:
     - postgresql
     - pgbouncer
+  collections:
+    - community.postgresql
 
 - hosts: sip
   become: yes
   roles:
     - kamailio
+  collections:
+    - community.postgresql
