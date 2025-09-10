@@ -2,8 +2,9 @@
 loadmodule "db_postgres.so"
 
 #### Load modules that use the DB
-loadmodule "usrloc.so"
+loadmodule "auth.so"
 loadmodule "auth_db.so"
+loadmodule "usrloc.so"
 loadmodule "acc.so"
 
 #### Database URL - set per module
