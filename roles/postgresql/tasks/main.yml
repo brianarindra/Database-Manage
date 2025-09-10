@@ -90,11 +90,11 @@
     privs: ALL
     grant_option: no
     login_unix_socket: /var/run/postgresql
-    
+
 - name: Initialize Kamailio database schema
   ansible.builtin.command: "/usr/local/sbin/kamdbctl init --password={{ postgres_password }}"
   args:
-    chdir: /usr/local/etc/kamailio
+    chdir: /usr/sbin/kamdbctl
   become: yes
   become_user: postgres
   register: kamdbctl_result
