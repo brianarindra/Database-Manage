@@ -46,7 +46,7 @@
   - { regexp: '^#?DBNAME', line: 'DBNAME=appdb'}
   - { regexp: '^#?DBRWUSER', line: 'DBRWUSER=kamailio'}
   - { regexp: '^#?DBRWPW', line: 'DBRWPW=supersecret'}
-  - { regexp: '^#?DBROUSER', line: 'DBROUSER=kamailioro'}
+  - { regexp: '^#?DBROUSER', line: 'DBROUSER=kamailio'}
   - { regexp: '^#?DBROPW', line: 'DBROPW=supersecret'} 
   notify: restart kamailio
 
