@@ -41,3 +41,9 @@
     line: "DBENGINE=PGSQL"
   notify: restart kamailio
 
+- name: Demploy kamctlrc
+  blockinfile:
+    dest: /etc/kamailio/kamctlrc
+    line: "{{ kamailio_kam }}"
+  notify: restart kamailio
+
