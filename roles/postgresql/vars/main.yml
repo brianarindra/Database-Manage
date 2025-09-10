@@ -7,6 +7,7 @@ slave_ip: 192.168.200.0/24   # Ganti sesuai IP slave
 postgres_version: 16
 kamailio_user: kamailio
 kamailio_password: supersecret
+kamailio_db: appdb
 
 
 postgres_port: 5432
