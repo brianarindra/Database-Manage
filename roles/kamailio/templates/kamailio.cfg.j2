@@ -1,8 +1,5 @@
 #!define DBURL "{{ kamailio_db_url }}"
 
-#### Load JSONRPC module
-loadmodule "jsonrpcs.so"
-
 #### Enable FIFO for kamctl
 modparam("jsonrpcs", "fifo_name", "/var/run/kamailio/kamailio_rpc.fifo")
 modparam("jsonrpcs", "fifo_mode", 0660)
