@@ -4,33 +4,32 @@
       - kamailio
       - kamailio-postgres-modules
     state: present
+    update_cache: yes
 
-
-- name: Ensure runtime directory for Kamailio exists
+- name: Ensure systemd override directory exists
   file:
-    path: /var/run/kamailio
+    path: /etc/systemd/system/kamailio.service.d
     state: directory
-    owner: kamailio
-    group: kamailio
+    owner: root
+    group: root
     mode: '0755'
 
-- name: Ensure tmpfiles.d entry for Kamailio
+- name: Configure systemd override for Kamailio runtime directory
   copy:
-    dest: /etc/tmpfiles.d/kamailio.conf
+    dest: /etc/systemd/system/kamailio.service.d/override.conf
     content: |
-      d /var/run/kamailio 0755 kamailio kamailio -
+      [Service]
+      RuntimeDirectory=kamailio
+      RuntimeDirectoryMode=0755
     owner: root
     group: root
     mode: '0644'
-
-- name: Apply tmpfiles configuration
-  command: systemd-tmpfiles --create
-  changed_when: false
-
+  notify:
+    - reload systemd
+    - restart kamailio
 
 - name: Deploy kamailio.cfg
   template:
     src: kamailio.cfg.j2
     dest: /etc/kamailio/kamailio.cfg
   notify: restart kamailio
-  
