@@ -37,13 +37,16 @@
 - name: Demploy kamctlrc
   lineinfile:
     path: /etc/kamailio/kamctlrc
-    regexp: "^#?DBENGINE=MYSQL"
-    line: "DBENGINE=PGSQL"
-  notify: restart kamailio
-
-- name: Demploy kamctlrc
-  blockinfile:
-    dest: /etc/kamailio/kamctlrc
-    content: "{{ kamailio_kam }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+  - { regexp: '^#?DBENGINE', line: 'DBENGINE=PGSQL'}
+  - { regexp: '^#?DBHOST', line: 'DBHOST=/var/run/pgbouncer'}
+  - { regexp: '^#?DBPORT', line: 'DBPORT=6432'}
+  - { regexp: '^#?DBNAME', line: 'DBNAME=appdb'}
+  - { regexp: '^#?DBRWUSER', line: 'DBRWUSER=kamailio'}
+  - { regexp: '^#?DBRWPW', line: 'DBRWPW=supersecret'}
+  - { regexp: '^#?DBROUSER', line: 'DBROUSER=kamailioro'}
+  - { regexp: '^#?DBROPW', line: 'DBROPW=supersecret'} 
   notify: restart kamailio
 
