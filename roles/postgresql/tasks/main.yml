@@ -17,9 +17,18 @@
     update_cache: yes
 
 - name: Configure postgresql.conf for replication
-  template:
-    src: postgresql.conf.j2
-    dest: /etc/postgresql/16/main/postgresql.conf
+  lineinfile:
+    path: /etc/postgresql/16/main/postgresql.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regexp: '^#?wal_level', line: 'wal_level = replica' }
+    - { regexp: '^#?archive_mode', line: 'archive_mode = on' }
+    - { regexp: '^#?archive_command', line: "archive_command = 'cp %p /var/lib/postgresql/wal_archive/%f'" }
+    - { regexp: '^#?max_wal_senders', line: 'max_wal_senders = 10' }
+    - { regexp: '^#?wal_keep_size', line: 'wal_keep_size = 256MB' }
+    - { regexp: '^#?hot_standby', line: 'hot_standby = on' }
+    - { regexp: '^#?listen_addresses', line: "listen_addresses = '*'" }
   notify: Restart PostgreSQL Master
 
 - name: Configure pg_hba.conf for replication and clients
