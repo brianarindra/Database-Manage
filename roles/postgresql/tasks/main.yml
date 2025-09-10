@@ -14,34 +14,6 @@
       - lsb-release
     state: present
 
-- name: Ensure /etc/apt/keyrings exists
-  ansible.builtin.file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: '0755'
-
-- name: Download Kamailio GPG key
-  ansible.builtin.get_url:
-    url: "https://deb.kamailio.org/kamailiodebkey.gpg"
-    dest: /etc/apt/keyrings/kamailio.gpg
-    mode: '0644'
-
-- name: Add Kamailio repository
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/kamailio.gpg] http://deb.kamailio.org/kamailio60 noble main"
-    state: present
-    filename: "kamailio"
-
-- name: Add Kamailio source repository (optional)
-  ansible.builtin.apt_repository:
-    repo: "deb-src [signed-by=/etc/apt/keyrings/kamailio.gpg] http://deb.kamailio.org/kamailio60 noble main"
-    state: present
-    filename: "kamailio"
-
-- name: Update apt cache
-  ansible.builtin.apt:
-    update_cache: yes
-
 - name: Install PostgreSQL 16 and psycopg2
   apt:
     name:
@@ -50,8 +22,8 @@
       - pgbouncer
       - python3-passlib
       - kamailio
-      - kamailio-pgsql 
-      - kamailio-utils
+      - kamailio-postgres-modules
+      - kamailio-utils-modules
 
     state: present
     update_cache: yes
