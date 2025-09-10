@@ -1,6 +1,7 @@
 pgbouncer_databases:
   - { name: "postgres", host: "127.0.0.1", port: 5432 }
   - { name: "appdb", host: "127.0.0.1", port: 5432 }
+  - { name: "template1", host: "127.0.0.1", port: 5432 }
 
 pgbouncer_listen_addr: 0.0.0.0
 pgbouncer_listen_port: 6432
