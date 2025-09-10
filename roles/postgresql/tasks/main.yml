@@ -14,20 +14,27 @@
       - lsb-release
     state: present
 
-- name: Add Kamailio GPG key
-  ansible.builtin.apt_key:
+- name: Ensure /etc/apt/keyrings exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download Kamailio GPG key
+  ansible.builtin.get_url:
     url: "https://deb.kamailio.org/kamailiodebkey.gpg"
-    state: present
+    dest: /etc/apt/keyrings/kamailio.gpg
+    mode: '0644'
 
 - name: Add Kamailio repository
   ansible.builtin.apt_repository:
-    repo: "deb http://deb.kamailio.org/kamailio60 noble main"
+    repo: "deb [signed-by=/etc/apt/keyrings/kamailio.gpg] http://deb.kamailio.org/kamailio60 noble main"
     state: present
     filename: "kamailio"
 
 - name: Add Kamailio source repository (optional)
   ansible.builtin.apt_repository:
-    repo: "deb-src http://deb.kamailio.org/kamailio60 noble main"
+    repo: "deb-src [signed-by=/etc/apt/keyrings/kamailio.gpg] http://deb.kamailio.org/kamailio60 noble main"
     state: present
     filename: "kamailio"
 
