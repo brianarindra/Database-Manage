@@ -44,6 +44,6 @@
 - name: Demploy kamctlrc
   blockinfile:
     dest: /etc/kamailio/kamctlrc
-    line: "{{ kamailio_kam }}"
+    content: "{{ kamailio_kam }}"
   notify: restart kamailio
 
