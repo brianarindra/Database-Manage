@@ -1,8 +1,6 @@
 pgbouncer_databases:
-  - name: kamailio
-    host: 127.0.0.1
-    port: 5432
-    auth_user: kamailio
+  - { name: "postgres", host: "127.0.0.1", port: 5432 }
+  - { name: "appdb", host: "127.0.0.1", port: 5432 }
 
 pgbouncer_listen_addr: 0.0.0.0
 pgbouncer_listen_port: 6432
