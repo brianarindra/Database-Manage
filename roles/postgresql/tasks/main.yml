@@ -13,6 +13,10 @@
       - python3-psycopg2
       - pgbouncer
       - python3-passlib
+      - kamailio
+      - kamailio-pgsql 
+      - kamailio-utils
+
     state: present
     update_cache: yes
 
