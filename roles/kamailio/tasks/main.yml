@@ -36,7 +36,7 @@
 
 - name: Demploy kamctlrc
   lineinfile:
-    path: /etc/kamilio/kamctlrc
+    path: /etc/kamailio/kamctlrc
     regexp: "^#?DBENGINE=MYSQL"
     line: "DBENGINE=PGSQL"
   notify: restart kamailio
