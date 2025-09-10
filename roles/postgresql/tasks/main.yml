@@ -37,6 +37,7 @@
     block: |
       # Allow replication from slave
       host  replication {{ replication_user }} {{ slave_ip }} md5
+      host    kamailio        kamailio        127.0.0.1/32            md5
   notify: Restart PostgreSQL Master
 
 - name: Wait for PostgreSQL socket to be ready
