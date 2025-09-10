@@ -92,14 +92,13 @@
     login_unix_socket: /var/run/postgresql
 
 - name: Initialize Kamailio database schema
-  ansible.builtin.command: "/usr/local/sbin/kamdbctl init --password={{ postgres_password }}"
-  args:
-    chdir: /usr/sbin/kamdbctl
+  ansible.builtin.command: "/usr/sbin/kamdbctl init --password={{ postgres_password }}"
   become: yes
   become_user: postgres
   register: kamdbctl_result
   changed_when: kamdbctl_result.rc != 0
   failed_when: kamdbctl_result.rc != 0 and 'already initialized' not in kamdbctl_result.stdout
+
 
 
 
