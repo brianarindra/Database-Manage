@@ -41,7 +41,7 @@
     line: "{{ item.line }}"
   loop:
   - { regexp: '^#?DBENGINE', line: 'DBENGINE=PGSQL'}
-  - { regexp: '^#?DBHOST', line: 'DBHOST=/var/run/pgbouncer'}
+  - { regexp: '^#?DBHOST', line: 'DBHOST=127.0.0.1'}
   - { regexp: '^#?DBPORT', line: 'DBPORT=6432'}
   - { regexp: '^#?DBNAME', line: 'DBNAME=appdb'}
   - { regexp: '^#?DBRWUSER', line: 'DBRWUSER=kamailio'}
