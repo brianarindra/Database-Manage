@@ -26,6 +26,8 @@ kamailio_db_host: /var/run/pgbouncer
 kamailio_db_port: ""
 kamailio_db_password: "supersecret"
 kamailio_db_url: "postgres://{{ kamailio_db_user }}:{{ kamailio_db_password }}@{{ kamailio_db_host }}/{{ kamailio_db_name }}"
+kamailio_kam: "DBURL=postgres://{{ kamailio_db_user }}:{{ kamailio_db_password }}@{{ kamailio_db_host }}/kamailio"
+
 
 
 

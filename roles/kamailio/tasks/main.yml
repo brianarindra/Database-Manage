@@ -33,3 +33,10 @@
     src: kamailio.cfg.j2
     dest: /etc/kamailio/kamailio.cfg
   notify: restart kamailio
+
+- name: Demploy kamctlrc
+  lineinfile:
+    dest: /etc/kamilio/kamctlrc
+    regexp: "^#?DBENGINE=MYSQL"
+    line: "DBENGINE=PGSQL"
+
