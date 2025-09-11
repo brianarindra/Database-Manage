@@ -61,11 +61,12 @@
 
 
 - name: Initialize Kamailio database schema
-  ansible.builtin.command: "/usr/sbin/kamdbctl init"
+  ansible.builtin.command: "/usr/sbin/kamdbctl create {{ kamailio_db }}"
   become: yes
   become_user: postgres
   register: kamdbctl_result
-  changed_when: kamdbctl_result.rc != 0
-  failed_when: kamdbctl_result.rc != 0 and 'already initialized' not in kamdbctl_result.stdout
+  changed_when: "'already exists' not in kamdbctl_result.stdout"
+  failed_when: kamdbctl_result.rc != 0 and 'already exists' not in kamdbctl_result.stdout
+
 
 
