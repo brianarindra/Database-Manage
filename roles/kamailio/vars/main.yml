@@ -3,7 +3,7 @@ db_user: kamailio
 db_password: supersecret
 db_host: 127.0.0.1
 db_port: 6432           # PgBouncer port
-db_name: kamailio
+db_name: appdb
 
 usrloc_db_mode: 2
 

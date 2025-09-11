@@ -61,7 +61,7 @@
 
 
 - name: Initialize Kamailio database schema
-  ansible.builtin.command: "/usr/sbin/kamdbctl create {{ kamailio_db }}"
+  ansible.builtin.command: "/usr/sbin/kamdbctl create {{ db_name }}"
   become: yes
   become_user: postgres
   register: kamdbctl_result
