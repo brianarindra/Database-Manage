@@ -54,14 +54,14 @@
 - name: Create .pgpass for postgres user
   ansible.builtin.copy:
     dest: /var/lib/postgresql/.pgpass
-    content: "127.0.0.1:6432:appdb:{{ db_user }}:{{ db_password }}\n"
+    content: "127.0.0.1:5432:appdb:{{ db_user }}:{{ db_password }}\n"
     owner: postgres
     group: postgres
     mode: '0600'
 
 - name: Check if Kamailio schema already initialized
   community.postgresql.postgresql_query:
-    db: "{{ kamailio_db }}"
+    db: "{{ kamailio_db_name }}"
     query: "SELECT 1 FROM information_schema.tables WHERE table_name='subscribers';"
   become_user: postgres
   register: kamailio_schema_check
