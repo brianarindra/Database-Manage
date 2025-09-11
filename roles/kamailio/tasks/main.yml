@@ -42,7 +42,7 @@
   loop:
   - { regexp: '^#?DBENGINE', line: 'DBENGINE=PGSQL'}
   - { regexp: '^#?DBHOST', line: 'DBHOST=127.0.0.1'}
-  - { regexp: '^#?DBPORT', line: 'DBPORT=6432'}
+  - { regexp: '^#?DBPORT', line: 'DBPORT=5432'}
   - { regexp: '^#?DBNAME', line: 'DBNAME=appdb'}
   - { regexp: '^#?DBRWUSER', line: 'DBRWUSER=kamailio'}
   - { regexp: '^#?DBRWPW', line: 'DBRWPW=supersecret'}
@@ -59,14 +59,29 @@
     group: postgres
     mode: '0600'
 
+- name: Check if Kamailio schema already initialized
+  community.postgresql.postgresql_query:
+    db: "{{ kamailio_db }}"
+    query: "SELECT 1 FROM information_schema.tables WHERE table_name='subscribers';"
+  become_user: postgres
+  register: kamailio_schema_check
+  failed_when: false
 
-- name: Initialize Kamailio database schema
-  ansible.builtin.command: "/usr/sbin/kamdbctl create {{ db_name }}"
+- name: Init Kamailio schema (direct to Postgres)
+  command: "/usr/sbin/kamdbctl create {{ kamailio_db }}"
+  environment:
+    DBPORT: "5432"
   become: yes
   become_user: postgres
-  register: kamdbctl_result
-  changed_when: "'already exists' not in kamdbctl_result.stdout"
-  failed_when: kamdbctl_result.rc != 0 and 'already exists' not in kamdbctl_result.stdout
+  when: kamailio_schema_check.query_result[0] is not defined
+
+# Setelah schema dibuat, ubah koneksi runtime ke PgBouncer
+- name: Configure kamctlrc for runtime (via pgbouncer)
+  lineinfile:
+    path: /etc/kamailio/kamctlrc
+    regexp: '^#?DBPORT'
+    line: 'DBPORT=6432'
+  notify: restart kamailio
 
 
 
