@@ -51,7 +51,7 @@
   notify: restart kamailio
 
 - name: Initialize Kamailio database schema
-  ansible.builtin.command: "/usr/sbin/kamdbctl init --password={{ postgres_password }}"
+  ansible.builtin.command: "/usr/sbin/kamdbctl init --password={{ db_password }}"
   become: yes
   become_user: postgres
   register: kamdbctl_result
