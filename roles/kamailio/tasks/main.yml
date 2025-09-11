@@ -50,11 +50,22 @@
   - { regexp: '^#?DBROPW', line: 'DBROPW=supersecret'} 
   notify: restart kamailio
 
+
+- name: Create .pgpass for postgres user
+  ansible.builtin.copy:
+    dest: /var/lib/postgresql/.pgpass
+    content: "127.0.0.1:6432:appdb:{{ kamailio_user }}:{{ kamailio_password }}\n"
+    owner: postgres
+    group: postgres
+    mode: '0600'
+
+
 - name: Initialize Kamailio database schema
-  ansible.builtin.command: "/usr/sbin/kamdbctl init --password={{ db_password }}"
+  ansible.builtin.command: "/usr/sbin/kamdbctl init"
   become: yes
   become_user: postgres
   register: kamdbctl_result
   changed_when: kamdbctl_result.rc != 0
   failed_when: kamdbctl_result.rc != 0 and 'already initialized' not in kamdbctl_result.stdout
+
 
