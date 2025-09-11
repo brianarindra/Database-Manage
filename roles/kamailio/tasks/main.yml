@@ -68,7 +68,7 @@
   failed_when: false
 
 - name: Init Kamailio schema (direct to Postgres)
-  command: "/usr/sbin/kamdbctl create {{ kamailio_db }}"
+  command: "/usr/sbin/kamdbctl create {{ kamailio_db_name }}"
   environment:
     DBPORT: "5432"
   become: yes
