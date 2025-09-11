@@ -54,7 +54,7 @@
 - name: Create .pgpass for postgres user
   ansible.builtin.copy:
     dest: /var/lib/postgresql/.pgpass
-    content: "127.0.0.1:6432:appdb:{{ kamailio_user }}:{{ kamailio_password }}\n"
+    content: "127.0.0.1:6432:appdb:{{ db_user }}:{{ db_password }}\n"
     owner: postgres
     group: postgres
     mode: '0600'
